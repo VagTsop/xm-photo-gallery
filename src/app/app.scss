@@ -6,5 +6,12 @@
 .app-main {
   max-width: 1400px;
   margin-inline: auto;
-  padding: 1rem;
+  padding-inline: var(--app-gutter);
+  padding-bottom: 4rem;
+
+  // Route transitions are handled by the View Transitions API (see
+  // app.config.ts); a CSS enter animation here would run on top of it.
+  > * {
+    display: block;
+  }
 }

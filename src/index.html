@@ -2,20 +2,42 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>XmPhotoGallery</title>
+    <title>XM Photo Gallery</title>
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="An endless, browsable stream of photography — save the shots you love."
+    />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://picsum.photos" />
+    <link rel="preconnect" href="https://fastly.picsum.photos" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined"
       rel="stylesheet"
     />
+    <script>
+      // Paint the right theme on the very first frame. ThemeStore owns this
+      // attribute once Angular boots; this only avoids the light-mode flash.
+      (function () {
+        try {
+          var saved = JSON.parse(localStorage.getItem('xm-photo-gallery:theme'));
+          var dark =
+            saved === 'dark' ||
+            (saved !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+        } catch (e) {
+          /* storage blocked: fall back to the `light dark` default in styles.scss */
+        }
+      })();
+    </script>
   </head>
   <body>
     <app-root></app-root>

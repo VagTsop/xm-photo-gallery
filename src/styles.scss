@@ -17,17 +17,48 @@ html {
       density: 0,
     )
   );
+
+  // Material's system variables resolve through `light-dark()`, so flipping
+  // `color-scheme` is all it takes to repaint the whole app. `ThemeStore`
+  // writes `data-theme` on <html>; before it boots we follow the OS.
+  color-scheme: light dark;
+
+  &[data-theme='light'] {
+    color-scheme: light;
+  }
+
+  &[data-theme='dark'] {
+    color-scheme: dark;
+  }
+}
+
+// Application-level design tokens. Anything a component needs more than once
+// (radii, elevation, motion, page gutter) lives here so the look stays in sync.
+:root {
+  --app-radius-sm: 10px;
+  --app-radius: 16px;
+  --app-radius-lg: 24px;
+  --app-radius-pill: 999px;
+
+  --app-shadow-sm: 0 1px 2px rgb(0 0 0 / 6%), 0 2px 6px rgb(0 0 0 / 6%);
+  --app-shadow-md: 0 6px 16px -6px rgb(0 0 0 / 18%), 0 2px 6px rgb(0 0 0 / 8%);
+  --app-shadow-lg: 0 18px 44px -16px rgb(0 0 0 / 32%), 0 4px 12px rgb(0 0 0 / 10%);
+
+  --app-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --app-duration: 220ms;
+
+  --app-gutter: clamp(1rem, 1rem + 1.5vw, 2rem);
+  --app-header-height: 64px;
+}
+
+html[data-theme='dark'] {
+  // Shadows read as mud on dark surfaces; lean on deeper, softer ones instead.
+  --app-shadow-sm: 0 1px 2px rgb(0 0 0 / 40%);
+  --app-shadow-md: 0 8px 20px -8px rgb(0 0 0 / 60%);
+  --app-shadow-lg: 0 22px 50px -18px rgb(0 0 0 / 75%);
 }
 
 body {
-  // Default the application to a light color theme. This can be changed to
-  // `dark` to enable the dark color theme, or to `light dark` to defer to the
-  // user's system settings.
-  color-scheme: light;
-
-  // Set a default background, font and text colors for the application using
-  // Angular Material's system-level CSS variables. Learn more about these
-  // variables at https://material.angular.dev/guide/system-variables
   background-color: var(--mat-sys-surface);
   color: var(--mat-sys-on-surface);
   font: var(--mat-sys-body-medium);
@@ -35,5 +66,51 @@ body {
   // Reset the user agent margin.
   margin: 0;
   height: 100%;
+
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
-/* You can add global styles to this file, and also import other style files */
+
+::selection {
+  background-color: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
+}
+
+// A single, consistent focus ring instead of each control inventing its own.
+:focus-visible {
+  outline: 2px solid var(--mat-sys-primary);
+  outline-offset: 2px;
+}
+
+// Route-level view transitions. The photo itself morphs between the grid card
+// and the detail stage; everything else cross-fades underneath it.
+::view-transition-group(*) {
+  animation-duration: 320ms;
+  animation-timing-function: var(--app-ease);
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 240ms;
+  animation-timing-function: var(--app-ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  // The `*` reset below does not reach view-transition pseudo-elements.
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

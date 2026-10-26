@@ -43,7 +43,10 @@ describe('PhotoApiService', () => {
     service.getPhotos(2, 30).subscribe();
 
     const req = httpMock.expectOne(
-      (r) => r.url === 'https://picsum.photos/v2/list' && r.params.get('page') === '2' && r.params.get('limit') === '30'
+      (r) =>
+        r.url === 'https://picsum.photos/v2/list' &&
+        r.params.get('page') === '2' &&
+        r.params.get('limit') === '30',
     );
     expect(req.request.method).toBe('GET');
     req.flush(mockPhotos);
