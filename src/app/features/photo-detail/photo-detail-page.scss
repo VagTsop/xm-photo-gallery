@@ -1,0 +1,35 @@
+.photo-detail {
+  margin: 0;
+  max-width: 900px;
+  margin-inline: auto;
+
+  &__back {
+    margin-bottom: 1rem;
+  }
+
+  &__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+  }
+
+  &__caption {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 0.75rem;
+  }
+
+  &__dimensions {
+    color: rgba(0, 0, 0, 0.6);
+    margin-right: auto;
+  }
+
+  &__spinner,
+  &__error {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+  }
+}

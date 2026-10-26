@@ -75,4 +75,25 @@ describe('PhotoApiService', () => {
 
     expect(error).toBeTruthy();
   });
+
+  it('fetches a single photo by id from the Picsum info endpoint', () => {
+    let result: Photo | undefined;
+    service.getPhotoById('42').subscribe((photo) => (result = photo));
+
+    const req = httpMock.expectOne('https://picsum.photos/id/42/info');
+    expect(req.request.method).toBe('GET');
+    req.flush(mockPhotos[0]);
+
+    expect(result).toEqual(mockPhotos[0]);
+  });
+
+  it('propagates an error when the photo id does not exist', () => {
+    let error: unknown;
+    service.getPhotoById('999').subscribe({ error: (e) => (error = e) });
+
+    const req = httpMock.expectOne('https://picsum.photos/id/999/info');
+    req.flush('Not found', { status: 404, statusText: 'Not Found' });
+
+    expect(error).toBeTruthy();
+  });
 });

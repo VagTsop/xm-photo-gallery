@@ -13,4 +13,8 @@ export class PhotoApiService {
       params: { page, limit },
     });
   }
+
+  getPhotoById(id: string): Observable<Photo> {
+    return this.http.get<Photo>(`https://picsum.photos/id/${id}/info`);
+  }
 }

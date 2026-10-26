@@ -1,0 +1,30 @@
+<a mat-button routerLink="/" class="photo-detail__back">
+  <mat-icon>arrow_back</mat-icon>
+  Back to gallery
+</a>
+
+@if (loading()) {
+  <div class="photo-detail__spinner" data-testid="photo-detail-spinner">
+    <mat-spinner diameter="32" />
+  </div>
+} @else if (error()) {
+  <p class="photo-detail__error">{{ error() }}</p>
+} @else if (photo(); as p) {
+  <figure class="photo-detail">
+    <img [src]="p.download_url" [alt]="'Photo by ' + p.author" class="photo-detail__image" />
+    <figcaption class="photo-detail__caption">
+      <span>{{ p.author }}</span>
+      <span class="photo-detail__dimensions">{{ p.width }} × {{ p.height }}</span>
+      <button
+        type="button"
+        mat-icon-button
+        data-testid="favorite-toggle"
+        [attr.aria-pressed]="isFavorite()"
+        [attr.aria-label]="isFavorite() ? 'Remove from favorites' : 'Add to favorites'"
+        (click)="onFavoriteClick()"
+      >
+        <mat-icon>{{ isFavorite() ? 'favorite' : 'favorite_border' }}</mat-icon>
+      </button>
+    </figcaption>
+  </figure>
+}
