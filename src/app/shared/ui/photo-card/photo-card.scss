@@ -1,30 +1,169 @@
 .photo-card {
   position: relative;
+  display: block;
   overflow: hidden;
   break-inside: avoid;
-  margin-bottom: 1rem;
+  margin-bottom: var(--photo-gap, 1rem);
+  border-radius: var(--app-radius);
+  background-color: var(--mat-sys-surface-container);
+  box-shadow: var(--app-shadow-sm);
+  transform: translateZ(0);
+  transition:
+    transform var(--app-duration) var(--app-ease),
+    box-shadow var(--app-duration) var(--app-ease);
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--app-shadow-lg);
+  }
+
+  &:hover &__image {
+    transform: scale(1.04);
+  }
+
+  &:hover &__scrim,
+  &:hover &__author {
+    opacity: 1;
+  }
+
+  &__link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    border-radius: inherit;
+  }
+
+  // Holds the image's aspect box so the skeleton and the photo occupy the
+  // exact same space — no layout shift when the image finally decodes.
+  &__frame {
+    display: block;
+    position: relative;
+    width: 100%;
+    aspect-ratio: var(--photo-ratio, 3 / 2);
+    overflow: hidden;
+    background: linear-gradient(
+      100deg,
+      var(--mat-sys-surface-container) 30%,
+      var(--mat-sys-surface-container-high) 50%,
+      var(--mat-sys-surface-container) 70%
+    );
+    background-size: 240% 100%;
+    animation: photo-card-shimmer 1.4s linear infinite;
+
+    &--loaded {
+      animation: none;
+      background: none;
+    }
+  }
 
   &__image {
     display: block;
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition:
+      opacity 420ms var(--app-ease),
+      transform 480ms var(--app-ease);
   }
 
-  &__content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.5rem 0.75rem !important;
+  &__frame--loaded &__image {
+    opacity: 1;
+  }
+
+  &__scrim {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 45%;
+    pointer-events: none;
+    background: linear-gradient(to top, rgb(0 0 0 / 72%), rgb(0 0 0 / 0%));
+    opacity: 0.85;
+    transition: opacity var(--app-duration) var(--app-ease);
   }
 
   &__author {
+    position: absolute;
+    left: 1rem;
+    right: 3.5rem;
+    bottom: 0.875rem;
+    color: #fff;
     font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    text-shadow: 0 1px 3px rgb(0 0 0 / 45%);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    opacity: 0.9;
+    transition: opacity var(--app-duration) var(--app-ease);
   }
 
-  &__favorite--active {
-    color: #e53935;
+  &__favorite {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    border-radius: var(--app-radius-pill);
+    background-color: rgb(0 0 0 / 35%);
+    backdrop-filter: blur(8px);
+    color: #fff;
+    cursor: pointer;
+    transition:
+      background-color var(--app-duration) var(--app-ease),
+      color var(--app-duration) var(--app-ease),
+      transform 160ms var(--app-ease);
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+
+    &:hover {
+      background-color: rgb(0 0 0 / 55%);
+      transform: scale(1.08);
+    }
+
+    &:active {
+      transform: scale(0.92);
+    }
+
+    &--active {
+      color: #ff5a6e;
+
+      mat-icon {
+        animation: photo-card-pop 320ms var(--app-ease);
+      }
+    }
+  }
+}
+
+@keyframes photo-card-shimmer {
+  from {
+    background-position: 140% 0;
+  }
+
+  to {
+    background-position: -140% 0;
+  }
+}
+
+@keyframes photo-card-pop {
+  0% {
+    transform: scale(1);
+  }
+
+  45% {
+    transform: scale(1.35);
+  }
+
+  100% {
+    transform: scale(1);
   }
 }

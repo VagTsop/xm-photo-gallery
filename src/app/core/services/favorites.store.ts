@@ -8,9 +8,7 @@ export const FAVORITES_STORAGE_KEY = 'xm-photo-gallery:favorites';
 export class FavoritesStore {
   private readonly storage = inject(StorageService);
 
-  readonly favorites = signal<Photo[]>(
-    this.storage.getItem<Photo[]>(FAVORITES_STORAGE_KEY, [])
-  );
+  readonly favorites = signal<Photo[]>(this.storage.getItem<Photo[]>(FAVORITES_STORAGE_KEY, []));
   readonly favoriteIds = computed(() => this.favorites().map((photo) => photo.id));
   readonly count = computed(() => this.favorites().length);
 
@@ -28,7 +26,7 @@ export class FavoritesStore {
     this.favorites.update((existing) =>
       existing.some((p) => p.id === photo.id)
         ? existing.filter((p) => p.id !== photo.id)
-        : [...existing, photo]
+        : [...existing, photo],
     );
   }
 }

@@ -1,32 +1,79 @@
-<a mat-button routerLink="/" class="photo-detail__back">
+<a href="/" class="photo-detail__back" (click)="onBackClick($event)">
   <mat-icon>arrow_back</mat-icon>
   Back to gallery
 </a>
 
 @if (loading()) {
   <div class="photo-detail__spinner" data-testid="photo-detail-spinner">
-    <mat-spinner diameter="32" />
+    <mat-spinner diameter="36" />
+    <span class="photo-detail__spinner-label">Loading photo…</span>
   </div>
 } @else if (error()) {
-  <p class="photo-detail__error">{{ error() }}</p>
+  <div class="photo-detail__state">
+    <span class="photo-detail__state-icon">
+      <mat-icon>image_not_supported</mat-icon>
+    </span>
+    <p class="photo-detail__error">{{ error() }}</p>
+    <a mat-flat-button href="/" (click)="onBackClick($event)">Back to gallery</a>
+  </div>
 } @else if (photo(); as p) {
   <figure class="photo-detail">
-    <img [src]="p.download_url" [alt]="'Photo by ' + p.author" class="photo-detail__image" />
+    <div
+      class="photo-detail__stage"
+      [class.photo-detail__stage--loaded]="imageLoaded()"
+      [style.aspect-ratio]="p.width + ' / ' + p.height"
+      [style.--photo-ar]="ratio()"
+    >
+      <img
+        [src]="displayUrl()"
+        [alt]="'Photo by ' + p.author"
+        [width]="p.width"
+        [height]="p.height"
+        decoding="async"
+        class="photo-detail__image"
+        [style.view-transition-name]="transitionName()"
+        fetchpriority="high"
+        (load)="onImageSettled()"
+        (error)="onImageSettled()"
+      />
+    </div>
+
     <figcaption class="photo-detail__caption">
-      <span>{{ p.author }}</span>
-      <span class="photo-detail__dimensions">{{ p.width }} × {{ p.height }}</span>
-      <button
-        type="button"
-        mat-icon-button
-        data-testid="favorite-toggle"
-        class="photo-detail__favorite"
-        [class.photo-detail__favorite--active]="isFavorite()"
-        [attr.aria-pressed]="isFavorite()"
-        [attr.aria-label]="isFavorite() ? 'Remove from favorites' : 'Add to favorites'"
-        (click)="onFavoriteClick()"
-      >
-        <mat-icon>{{ isFavorite() ? 'favorite' : 'favorite_border' }}</mat-icon>
-      </button>
+      <div class="photo-detail__meta">
+        <span class="photo-detail__eyebrow">Photograph by</span>
+        <span class="photo-detail__author">{{ p.author }}</span>
+        <span class="photo-detail__dimensions">
+          <mat-icon>aspect_ratio</mat-icon>
+          {{ p.width }} × {{ p.height }}
+        </span>
+      </div>
+
+      <div class="photo-detail__actions">
+        <button
+          type="button"
+          mat-stroked-button
+          data-testid="favorite-toggle"
+          class="photo-detail__favorite"
+          [class.photo-detail__favorite--active]="isFavorite()"
+          [attr.aria-pressed]="isFavorite()"
+          [attr.aria-label]="isFavorite() ? 'Remove from favorites' : 'Add to favorites'"
+          (click)="onFavoriteClick()"
+        >
+          <mat-icon>{{ isFavorite() ? 'favorite' : 'favorite_border' }}</mat-icon>
+          {{ isFavorite() ? 'Saved' : 'Save' }}
+        </button>
+
+        <a
+          mat-stroked-button
+          [href]="p.url"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="photo-detail__source"
+        >
+          <mat-icon>open_in_new</mat-icon>
+          Source
+        </a>
+      </div>
     </figcaption>
   </figure>
 }

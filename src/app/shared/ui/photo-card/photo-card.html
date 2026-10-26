@@ -1,25 +1,39 @@
-<mat-card appearance="outlined" class="photo-card">
-  <a [routerLink]="['/photo', photo().id]" class="photo-card__link">
-    <img
-      [src]="thumbnailUrl()"
-      [alt]="'Photo by ' + photo().author"
-      loading="lazy"
-      class="photo-card__image"
-    />
-  </a>
-  <mat-card-content class="photo-card__content">
+<article class="photo-card" [style.--photo-ratio]="aspectRatio()">
+  <a
+    [routerLink]="['/photo', photo().id]"
+    class="photo-card__link"
+    (pointerdown)="onNavigateIntent()"
+    (keydown.enter)="onNavigateIntent()"
+  >
+    <span class="photo-card__frame" [class.photo-card__frame--loaded]="loaded()">
+      <img
+        [src]="thumbnailUrl()"
+        [srcset]="thumbnailSrcset()"
+        [sizes]="SIZES"
+        [alt]="'Photo by ' + photo().author"
+        [width]="photo().width"
+        [height]="photo().height"
+        [style.view-transition-name]="transitionName()"
+        loading="lazy"
+        decoding="async"
+        class="photo-card__image"
+        (load)="onImageSettled()"
+        (error)="onImageSettled()"
+      />
+    </span>
+    <span class="photo-card__scrim" aria-hidden="true"></span>
     <span class="photo-card__author">{{ photo().author }}</span>
-    <button
-      type="button"
-      mat-icon-button
-      data-testid="favorite-toggle"
-      class="photo-card__favorite"
-      [class.photo-card__favorite--active]="isFavorite()"
-      [attr.aria-pressed]="isFavorite()"
-      [attr.aria-label]="isFavorite() ? 'Remove from favorites' : 'Add to favorites'"
-      (click)="onFavoriteClick($event)"
-    >
-      <mat-icon>{{ isFavorite() ? 'favorite' : 'favorite_border' }}</mat-icon>
-    </button>
-  </mat-card-content>
-</mat-card>
+  </a>
+
+  <button
+    type="button"
+    data-testid="favorite-toggle"
+    class="photo-card__favorite"
+    [class.photo-card__favorite--active]="isFavorite()"
+    [attr.aria-pressed]="isFavorite()"
+    [attr.aria-label]="isFavorite() ? 'Remove from favorites' : 'Add to favorites'"
+    (click)="onFavoriteClick($event)"
+  >
+    <mat-icon>{{ isFavorite() ? 'favorite' : 'favorite_border' }}</mat-icon>
+  </button>
+</article>
