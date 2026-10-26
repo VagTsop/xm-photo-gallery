@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, effect, inject, input } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -18,6 +18,7 @@ export class PhotoDetailPage {
   private readonly photoStream = inject(PhotoStreamStore);
   private readonly favorites = inject(FavoritesStore);
   private readonly photoApi = inject(PhotoApiService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   readonly id = input.required<string>();
 
@@ -38,6 +39,16 @@ export class PhotoDetailPage {
     !this.localPhoto() && this.remotePhoto.error() ? 'This photo could not be found.' : null
   );
   protected readonly isFavorite = computed(() => this.favorites.isFavorite(this.id()));
+
+  constructor() {
+    effect(() => {
+      this.loading();
+      this.error();
+      this.localPhoto();
+      this.isFavorite();
+      this.cdr.markForCheck();
+    });
+  }
 
   onFavoriteClick(): void {
     const photo = this.photo();
