@@ -1,4 +1,4 @@
-import { Component, computed, input, output } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, effect, inject, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { PhotoCard } from '../photo-card/photo-card';
@@ -24,6 +24,14 @@ export class PhotoGrid {
   readonly retry = output<void>();
 
   private readonly favoriteIdSet = computed(() => new Set(this.favoriteIds()));
+  private readonly cdr = inject(ChangeDetectorRef);
+
+  constructor() {
+    effect(() => {
+      this.favoriteIdSet();
+      this.cdr.markForCheck();
+    });
+  }
 
   isFavorite(id: string): boolean {
     return this.favoriteIdSet().has(id);
