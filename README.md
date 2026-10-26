@@ -1,6 +1,6 @@
 # XM Photo Gallery
 
-An infinite-scroll photo gallery built with **Angular 22** (signals, `httpResource`/`rxResource`, zoneless change detection) against the [Picsum Photos API](https://picsum.photos/). Built as practice ahead of a take-home assignment for a Senior Angular Developer role at XM.
+An infinite-scroll photo gallery built with **Angular 22** (signals, `httpResource`/`rxResource`, zoneless change detection) against the [Picsum Photos API](https://picsum.photos/).
 
 ## Features
 
