@@ -15,7 +15,7 @@ export class InfiniteScrollDirective {
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly destroyRef = inject(DestroyRef);
 
-  readonly disabled = input(false, { alias: 'infiniteScrollDisabled' });
+  readonly infiniteScrollDisabled = input(false);
   readonly loadMore = output<void>();
 
   private observer?: IntersectionObserver;
@@ -24,7 +24,7 @@ export class InfiniteScrollDirective {
     afterNextRender(() => {
       this.observer = new IntersectionObserver(
         ([entry]) => {
-          if (entry?.isIntersecting && !this.disabled()) {
+          if (entry?.isIntersecting && !this.infiniteScrollDisabled()) {
             this.loadMore.emit();
           }
         },

@@ -24,7 +24,6 @@ function buildPhotos(count: number): Photo[] {
 class MockIntersectionObserver {
   observe = vi.fn();
   disconnect = vi.fn();
-  constructor(_callback: IntersectionObserverCallback) {}
 }
 
 describe('PhotosPage', () => {
