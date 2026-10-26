@@ -13,6 +13,8 @@
       type="button"
       mat-icon-button
       data-testid="favorite-toggle"
+      class="photo-card__favorite"
+      [class.photo-card__favorite--active]="isFavorite()"
       [attr.aria-pressed]="isFavorite()"
       [attr.aria-label]="isFavorite() ? 'Remove from favorites' : 'Add to favorites'"
       (click)="onFavoriteClick($event)"

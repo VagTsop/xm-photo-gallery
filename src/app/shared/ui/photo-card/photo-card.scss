@@ -23,4 +23,8 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
+  &__favorite--active {
+    color: #e53935;
+  }
 }
