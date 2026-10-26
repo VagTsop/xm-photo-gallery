@@ -1,0 +1,26 @@
+.photo-card {
+  position: relative;
+  overflow: hidden;
+  break-inside: avoid;
+  margin-bottom: 1rem;
+
+  &__image {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.75rem !important;
+  }
+
+  &__author {
+    font-size: 0.875rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

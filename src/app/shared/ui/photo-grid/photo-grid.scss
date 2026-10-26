@@ -1,0 +1,33 @@
+.photo-grid {
+  &__masonry {
+    columns: 1;
+    column-gap: 1rem;
+
+    @media (min-width: 600px) {
+      columns: 2;
+    }
+
+    @media (min-width: 900px) {
+      columns: 3;
+    }
+
+    @media (min-width: 1200px) {
+      columns: 4;
+    }
+  }
+
+  &__sentinel {
+    height: 1px;
+  }
+
+  &__spinner,
+  &__empty,
+  &__error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+  }
+}

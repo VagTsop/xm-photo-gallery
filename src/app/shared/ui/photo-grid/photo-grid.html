@@ -1,0 +1,38 @@
+@if (error()) {
+  <div class="photo-grid__error" data-testid="photo-grid-error">
+    <p>{{ error() }}</p>
+    <button type="button" mat-stroked-button data-testid="retry-button" (click)="retry.emit()">
+      Retry
+    </button>
+  </div>
+} @else if (photos().length === 0 && !loading()) {
+  <div class="photo-grid__empty" data-testid="photo-grid-empty">
+    <p>{{ emptyMessage() }}</p>
+  </div>
+} @else {
+  <div class="photo-grid__masonry">
+    @for (photo of photos(); track photo.id) {
+      <app-photo-card
+        [photo]="photo"
+        [isFavorite]="isFavorite(photo.id)"
+        (favoriteToggled)="favoriteToggled.emit($event)"
+      />
+    }
+  </div>
+
+  @if (hasMore()) {
+    <div
+      appInfiniteScroll
+      [infiniteScrollDisabled]="loading()"
+      (loadMore)="loadMore.emit()"
+      class="photo-grid__sentinel"
+      data-testid="photo-grid-sentinel"
+    ></div>
+  }
+
+  @if (loading()) {
+    <div class="photo-grid__spinner" data-testid="photo-grid-spinner">
+      <mat-spinner diameter="32" />
+    </div>
+  }
+}

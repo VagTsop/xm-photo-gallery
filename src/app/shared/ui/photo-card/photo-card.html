@@ -1,0 +1,21 @@
+<mat-card appearance="outlined" class="photo-card">
+  <img
+    [src]="thumbnailUrl()"
+    [alt]="'Photo by ' + photo().author"
+    loading="lazy"
+    class="photo-card__image"
+  />
+  <mat-card-content class="photo-card__content">
+    <span class="photo-card__author">{{ photo().author }}</span>
+    <button
+      type="button"
+      mat-icon-button
+      data-testid="favorite-toggle"
+      [attr.aria-pressed]="isFavorite()"
+      [attr.aria-label]="isFavorite() ? 'Remove from favorites' : 'Add to favorites'"
+      (click)="onFavoriteClick($event)"
+    >
+      <mat-icon>{{ isFavorite() ? 'favorite' : 'favorite_border' }}</mat-icon>
+    </button>
+  </mat-card-content>
+</mat-card>
