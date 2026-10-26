@@ -1,0 +1,11 @@
+<app-photo-grid
+  [photos]="photos()"
+  [favoriteIds]="favoriteIds()"
+  [loading]="loading()"
+  [error]="error()"
+  [hasMore]="hasMore()"
+  emptyMessage="No photos yet."
+  (loadMore)="onLoadMore()"
+  (retry)="onRetry()"
+  (favoriteToggled)="onFavoriteToggled($event)"
+/>

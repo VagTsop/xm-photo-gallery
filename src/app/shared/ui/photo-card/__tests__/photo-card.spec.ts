@@ -35,17 +35,17 @@ describe('PhotoCard', () => {
     expect(img?.alt).toContain('Jane Doe');
   });
 
-  it('emits favoriteToggled with the photo id when the favorite button is clicked', () => {
+  it('emits favoriteToggled with the whole photo when the favorite button is clicked', () => {
     const fixture = createFixture();
-    const emitted: string[] = [];
-    fixture.componentInstance.favoriteToggled.subscribe((id: string) => emitted.push(id));
+    const emitted: Photo[] = [];
+    fixture.componentInstance.favoriteToggled.subscribe((p: Photo) => emitted.push(p));
 
     const button = (fixture.nativeElement as HTMLElement).querySelector<HTMLButtonElement>(
       '[data-testid="favorite-toggle"]'
     );
     button?.click();
 
-    expect(emitted).toEqual(['42']);
+    expect(emitted).toEqual([photo]);
   });
 
   it('shows a filled heart icon when isFavorite is true', () => {

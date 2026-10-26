@@ -80,12 +80,12 @@ describe('PhotoGrid', () => {
     fixture.detectChanges();
     await fixture.whenStable();
 
-    const emitted: string[] = [];
-    fixture.componentInstance.favoriteToggled.subscribe((id: string) => emitted.push(id));
+    const emitted: Photo[] = [];
+    fixture.componentInstance.favoriteToggled.subscribe((photo: Photo) => emitted.push(photo));
 
     fixture.nativeElement.querySelector('[data-testid="favorite-toggle"]').click();
 
-    expect(emitted).toEqual(['1']);
+    expect(emitted.map((p) => p.id)).toEqual(['1']);
   });
 
   it('shows the empty message when there are no photos and nothing is loading', async () => {

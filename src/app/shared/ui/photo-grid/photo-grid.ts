@@ -19,7 +19,7 @@ export class PhotoGrid {
   readonly hasMore = input(true);
   readonly emptyMessage = input('No photos found.');
 
-  readonly favoriteToggled = output<string>();
+  readonly favoriteToggled = output<Photo>();
   readonly loadMore = output<void>();
   readonly retry = output<void>();
 

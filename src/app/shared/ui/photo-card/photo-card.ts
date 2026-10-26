@@ -13,7 +13,7 @@ import type { Photo } from '../../../core/models/photo.model';
 export class PhotoCard {
   readonly photo = input.required<Photo>();
   readonly isFavorite = input(false);
-  readonly favoriteToggled = output<string>();
+  readonly favoriteToggled = output<Photo>();
 
   protected readonly thumbnailUrl = computed(() => {
     const p = this.photo();
@@ -24,6 +24,6 @@ export class PhotoCard {
 
   onFavoriteClick(event: Event): void {
     event.stopPropagation();
-    this.favoriteToggled.emit(this.photo().id);
+    this.favoriteToggled.emit(this.photo());
   }
 }

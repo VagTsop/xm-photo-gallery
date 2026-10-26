@@ -1,5 +1,6 @@
 import { Injectable, computed, effect, inject, signal } from '@angular/core';
 import { StorageService } from './storage.service';
+import type { Photo } from '../models/photo.model';
 
 export const FAVORITES_STORAGE_KEY = 'xm-photo-gallery:favorites';
 
@@ -7,24 +8,27 @@ export const FAVORITES_STORAGE_KEY = 'xm-photo-gallery:favorites';
 export class FavoritesStore {
   private readonly storage = inject(StorageService);
 
-  readonly favoriteIds = signal<string[]>(
-    this.storage.getItem<string[]>(FAVORITES_STORAGE_KEY, [])
+  readonly favorites = signal<Photo[]>(
+    this.storage.getItem<Photo[]>(FAVORITES_STORAGE_KEY, [])
   );
-  readonly count = computed(() => this.favoriteIds().length);
+  readonly favoriteIds = computed(() => this.favorites().map((photo) => photo.id));
+  readonly count = computed(() => this.favorites().length);
 
   constructor() {
     effect(() => {
-      this.storage.setItem(FAVORITES_STORAGE_KEY, this.favoriteIds());
+      this.storage.setItem(FAVORITES_STORAGE_KEY, this.favorites());
     });
   }
 
   isFavorite(id: string): boolean {
-    return this.favoriteIds().includes(id);
+    return this.favorites().some((photo) => photo.id === id);
   }
 
-  toggle(id: string): void {
-    this.favoriteIds.update((ids) =>
-      ids.includes(id) ? ids.filter((existing) => existing !== id) : [...ids, id]
+  toggle(photo: Photo): void {
+    this.favorites.update((existing) =>
+      existing.some((p) => p.id === photo.id)
+        ? existing.filter((p) => p.id !== photo.id)
+        : [...existing, photo]
     );
   }
 }
