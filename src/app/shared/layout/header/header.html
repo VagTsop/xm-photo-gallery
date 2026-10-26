@@ -1,0 +1,28 @@
+<mat-toolbar color="primary" class="header">
+  <span class="header__title">XM Photo Gallery</span>
+  <span class="header__spacer"></span>
+  <nav class="header__nav">
+    <a
+      mat-button
+      routerLink="/"
+      routerLinkActive="header__link--active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      data-testid="nav-photos"
+    >
+      <mat-icon>photo_library</mat-icon>
+      Photos
+    </a>
+    <a
+      mat-button
+      routerLink="/favorites"
+      routerLinkActive="header__link--active"
+      data-testid="nav-favorites"
+    >
+      <mat-icon [matBadge]="favoritesCount() || null" matBadgeColor="accent">favorite</mat-icon>
+      Favorites
+      @if (favoritesCount() > 0) {
+        <span data-testid="favorites-count" class="header__count">({{ favoritesCount() }})</span>
+      }
+    </a>
+  </nav>
+</mat-toolbar>

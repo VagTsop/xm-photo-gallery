@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { vi } from 'vitest';
 import { PhotoGrid } from '../photo-grid';
 import type { Photo } from '../../../../core/models/photo.model';
@@ -48,7 +49,7 @@ describe('PhotoGrid', () => {
   });
 
   function createFixture() {
-    TestBed.configureTestingModule({ imports: [PhotoGrid] });
+    TestBed.configureTestingModule({ imports: [PhotoGrid], providers: [provideRouter([])] });
     return TestBed.createComponent(PhotoGrid);
   }
 

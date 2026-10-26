@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { computed, signal } from '@angular/core';
 import { vi } from 'vitest';
 import { FavoritesPage } from '../favorites-page';
@@ -33,7 +34,7 @@ describe('FavoritesPage', () => {
 
     TestBed.configureTestingModule({
       imports: [FavoritesPage],
-      providers: [{ provide: FavoritesStore, useValue: favoritesMock }],
+      providers: [provideRouter([]), { provide: FavoritesStore, useValue: favoritesMock }],
     });
   });
 

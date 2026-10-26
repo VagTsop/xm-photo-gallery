@@ -1,10 +1,12 @@
 <mat-card appearance="outlined" class="photo-card">
-  <img
-    [src]="thumbnailUrl()"
-    [alt]="'Photo by ' + photo().author"
-    loading="lazy"
-    class="photo-card__image"
-  />
+  <a [routerLink]="['/photo', photo().id]" class="photo-card__link">
+    <img
+      [src]="thumbnailUrl()"
+      [alt]="'Photo by ' + photo().author"
+      loading="lazy"
+      class="photo-card__image"
+    />
+  </a>
   <mat-card-content class="photo-card__content">
     <span class="photo-card__author">{{ photo().author }}</span>
     <button

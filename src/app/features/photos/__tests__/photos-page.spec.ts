@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { signal } from '@angular/core';
 import { vi } from 'vitest';
 import { PhotosPage } from '../photos-page';
@@ -60,6 +61,7 @@ describe('PhotosPage', () => {
     TestBed.configureTestingModule({
       imports: [PhotosPage],
       providers: [
+        provideRouter([]),
         { provide: PhotoStreamStore, useValue: photoStreamMock },
         { provide: FavoritesStore, useValue: favoritesMock },
       ],

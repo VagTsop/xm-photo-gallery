@@ -1,4 +1,5 @@
 import { Component, computed, input, output } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,7 +7,7 @@ import type { Photo } from '../../../core/models/photo.model';
 
 @Component({
   selector: 'app-photo-card',
-  imports: [MatCardModule, MatIconModule, MatButtonModule],
+  imports: [RouterLink, MatCardModule, MatIconModule, MatButtonModule],
   templateUrl: './photo-card.html',
   styleUrl: './photo-card.scss',
 })

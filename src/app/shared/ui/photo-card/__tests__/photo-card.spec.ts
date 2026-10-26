@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { PhotoCard } from '../photo-card';
 import type { Photo } from '../../../../core/models/photo.model';
 
@@ -13,7 +14,7 @@ const photo: Photo = {
 
 describe('PhotoCard', () => {
   function createFixture() {
-    TestBed.configureTestingModule({ imports: [PhotoCard] });
+    TestBed.configureTestingModule({ imports: [PhotoCard], providers: [provideRouter([])] });
     const fixture = TestBed.createComponent(PhotoCard);
     fixture.componentRef.setInput('photo', photo);
     fixture.detectChanges();
@@ -25,6 +26,13 @@ describe('PhotoCard', () => {
     const text = (fixture.nativeElement as HTMLElement).textContent;
 
     expect(text).toContain('Jane Doe');
+  });
+
+  it('links to the photo detail page', () => {
+    const fixture = createFixture();
+    const link = (fixture.nativeElement as HTMLElement).querySelector('a');
+
+    expect(link?.getAttribute('href')).toBe('/photo/42');
   });
 
   it('renders the photo image with a down-scaled url and alt text', () => {
@@ -49,7 +57,7 @@ describe('PhotoCard', () => {
   });
 
   it('shows a filled heart icon when isFavorite is true', () => {
-    TestBed.configureTestingModule({ imports: [PhotoCard] });
+    TestBed.configureTestingModule({ imports: [PhotoCard], providers: [provideRouter([])] });
     const fixture = TestBed.createComponent(PhotoCard);
     fixture.componentRef.setInput('photo', photo);
     fixture.componentRef.setInput('isFavorite', true);
