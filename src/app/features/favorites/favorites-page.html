@@ -1,0 +1,7 @@
+<app-photo-grid
+  [photos]="photos()"
+  [favoriteIds]="favoriteIds()"
+  [hasMore]="false"
+  emptyMessage="You haven't favorited any photos yet."
+  (favoriteToggled)="onFavoriteToggled($event)"
+/>
