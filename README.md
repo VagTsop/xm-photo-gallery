@@ -49,6 +49,6 @@ ng build        # production build
 - No skeleton loaders on first paint, just a spinner — a nice-to-have, not a correctness gap.
 - Picsum has no search/filter/category API, so there's nothing to filter the gallery by beyond pagination.
 
-## Connection to the role
+## Why these choices
 
-Built to demonstrate the same decisions a real XM take-home would be judged on: modern Angular 22 idioms (signals, `input()`/`output()`, `rxResource`, zoneless), TDD (every piece of logic was written test-first — see the commit history), a defensible vertical-slice architecture, and restraint (no NgRx, no Tailwind-on-top-of-Material, no over-engineering) over throwing every advanced API at a small app for its own sake.
+Built to showcase modern Angular 22 idioms (signals, `input()`/`output()`, `rxResource`, zoneless), TDD (every piece of logic was written test-first — see the commit history), a defensible vertical-slice architecture, and restraint (no NgRx, no Tailwind-on-top-of-Material, no over-engineering) over throwing every advanced API at a small app for its own sake.
