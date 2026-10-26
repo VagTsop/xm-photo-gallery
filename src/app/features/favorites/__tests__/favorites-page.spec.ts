@@ -55,6 +55,17 @@ describe('FavoritesPage', () => {
     });
   });
 
+  it('re-renders when a favorite is removed from the store after the initial render', async () => {
+    const fixture = TestBed.createComponent(FavoritesPage);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelectorAll('app-photo-card').length).toBe(2);
+
+    favoritesMock.favorites.set([buildPhoto('2')]);
+    await fixture.whenStable();
+
+    expect(fixture.nativeElement.querySelectorAll('app-photo-card').length).toBe(1);
+  });
+
   it('shows an empty-state message when there are no favorites', () => {
     favoritesMock.favorites.set([]);
     const fixture = TestBed.createComponent(FavoritesPage);

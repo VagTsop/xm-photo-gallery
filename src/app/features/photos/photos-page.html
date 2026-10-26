@@ -1,3 +1,9 @@
+<app-page-header
+  title="Gallery"
+  subtitle="An endless stream of photography from Picsum. Tap the heart on any shot to keep it."
+  [count]="photos().length || null"
+/>
+
 <app-photo-grid
   [photos]="photos()"
   [favoriteIds]="favoriteIds()"

@@ -1,13 +1,31 @@
-@if (error()) {
-  <div class="photo-grid__error" data-testid="photo-grid-error">
-    <p>{{ error() }}</p>
-    <button type="button" mat-stroked-button data-testid="retry-button" (click)="retry.emit()">
+@if (fatalError()) {
+  <div class="photo-grid__state photo-grid__state--error" data-testid="photo-grid-error">
+    <span class="photo-grid__state-icon photo-grid__state-icon--error">
+      <mat-icon>cloud_off</mat-icon>
+    </span>
+    <p class="photo-grid__state-title">{{ error() }}</p>
+    <p class="photo-grid__state-hint">Check your connection and give it another go.</p>
+    <button type="button" mat-flat-button data-testid="retry-button" (click)="retry.emit()">
       Retry
     </button>
   </div>
-} @else if (photos().length === 0 && !loading()) {
-  <div class="photo-grid__empty" data-testid="photo-grid-empty">
-    <p>{{ emptyMessage() }}</p>
+} @else if (showSkeletons()) {
+  <div class="photo-grid__masonry" data-testid="photo-grid-skeletons" aria-hidden="true">
+    @for (ratio of skeletonRatios; track $index) {
+      <div class="photo-grid__skeleton" [style.aspect-ratio]="ratio"></div>
+    }
+  </div>
+} @else if (photos().length === 0) {
+  <div class="photo-grid__state" data-testid="photo-grid-empty">
+    <span class="photo-grid__state-icon">
+      <mat-icon>{{ emptyIcon() }}</mat-icon>
+    </span>
+    <p class="photo-grid__state-title">{{ emptyMessage() }}</p>
+    @if (emptyActionLabel() && emptyActionLink()) {
+      <a mat-flat-button [routerLink]="emptyActionLink()" data-testid="empty-action">
+        {{ emptyActionLabel() }}
+      </a>
+    }
   </div>
 } @else {
   <div class="photo-grid__masonry">
@@ -20,7 +38,7 @@
     }
   </div>
 
-  @if (hasMore()) {
+  @if (hasMore() && !error()) {
     <div
       appInfiniteScroll
       [infiniteScrollDisabled]="loading()"
@@ -30,9 +48,24 @@
     ></div>
   }
 
+  <!-- A failure partway through the stream must not take the loaded photos
+       down with it; it degrades to a strip under the grid instead. -->
+  @if (error()) {
+    <div class="photo-grid__inline-error" data-testid="photo-grid-inline-error" role="alert">
+      <mat-icon>cloud_off</mat-icon>
+      <span class="photo-grid__inline-error-text">{{ error() }}</span>
+      <button type="button" mat-stroked-button data-testid="retry-button" (click)="retry.emit()">
+        Retry
+      </button>
+    </div>
+  }
+
   @if (loading()) {
     <div class="photo-grid__spinner" data-testid="photo-grid-spinner">
       <mat-spinner diameter="32" />
+      <span class="photo-grid__spinner-label" role="status" aria-live="polite">
+        Loading more photos…
+      </span>
     </div>
   }
 }

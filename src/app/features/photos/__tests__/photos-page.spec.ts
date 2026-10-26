@@ -95,6 +95,17 @@ describe('PhotosPage', () => {
     expect(fixture.nativeElement.querySelectorAll('app-photo-card').length).toBe(3);
   });
 
+  it('re-renders the grid when the store signal changes after the initial render', async () => {
+    const fixture = TestBed.createComponent(PhotosPage);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelectorAll('app-photo-card').length).toBe(0);
+
+    photoStreamMock.photos.set(buildPhotos(3));
+    await fixture.whenStable();
+
+    expect(fixture.nativeElement.querySelectorAll('app-photo-card').length).toBe(3);
+  });
+
   it('calls favorites.toggle when a card emits favoriteToggled', () => {
     photoStreamMock.photos.set(buildPhotos(1));
     const fixture = TestBed.createComponent(PhotosPage);

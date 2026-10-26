@@ -1,7 +1,17 @@
+<app-page-header
+  title="Favorites"
+  subtitle="Photos you've saved. They stay here between visits."
+  [count]="photos().length || null"
+  countLabel="saved"
+/>
+
 <app-photo-grid
   [photos]="photos()"
   [favoriteIds]="favoriteIds()"
   [hasMore]="false"
   emptyMessage="You haven't favorited any photos yet."
+  emptyIcon="favorite_border"
+  emptyActionLabel="Browse the gallery"
+  emptyActionLink="/"
   (favoriteToggled)="onFavoriteToggled($event)"
 />

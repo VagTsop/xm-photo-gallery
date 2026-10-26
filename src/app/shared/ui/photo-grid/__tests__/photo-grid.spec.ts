@@ -75,6 +75,23 @@ describe('PhotoGrid', () => {
     expect(buttons[1].getAttribute('aria-pressed')).toBe('false');
   });
 
+  it('updates a card to favorite when favoriteIds changes after the initial render', async () => {
+    const fixture = createFixture();
+    fixture.componentRef.setInput('photos', buildPhotos(2));
+    fixture.componentRef.setInput('favoriteIds', []);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    let button = fixture.nativeElement.querySelectorAll('[data-testid="favorite-toggle"]')[0];
+    expect(button.getAttribute('aria-pressed')).toBe('false');
+
+    fixture.componentRef.setInput('favoriteIds', ['1']);
+    await fixture.whenStable();
+
+    button = fixture.nativeElement.querySelectorAll('[data-testid="favorite-toggle"]')[0];
+    expect(button.getAttribute('aria-pressed')).toBe('true');
+  });
+
   it('re-emits favoriteToggled from a card with the photo id', async () => {
     const fixture = createFixture();
     fixture.componentRef.setInput('photos', buildPhotos(1));
@@ -98,20 +115,51 @@ describe('PhotoGrid', () => {
     expect(fixture.nativeElement.textContent).toContain('No photos found');
   });
 
-  it('shows an error state with a retry button instead of the grid', async () => {
+  it('takes over the page with an error state when there is nothing loaded yet', async () => {
+    const fixture = createFixture();
+    fixture.componentRef.setInput('photos', []);
+    fixture.componentRef.setInput('error', 'Failed to load photos.');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(fixture.nativeElement.querySelector('[data-testid="photo-grid-error"]')).toBeTruthy();
+    expect(fixture.nativeElement.textContent).toContain('Failed to load photos.');
+
+    const emitted: void[] = [];
+    fixture.componentInstance.retry.subscribe(() => emitted.push(undefined));
+    fixture.nativeElement.querySelector('[data-testid="retry-button"]').click();
+    expect(emitted.length).toBe(1);
+  });
+
+  it('keeps already-loaded photos on screen when a later page fails', async () => {
     const fixture = createFixture();
     fixture.componentRef.setInput('photos', buildPhotos(3));
     fixture.componentRef.setInput('error', 'Failed to load photos.');
     fixture.detectChanges();
     await fixture.whenStable();
 
-    expect(fixture.nativeElement.textContent).toContain('Failed to load photos.');
-    expect(fixture.nativeElement.querySelectorAll('app-photo-card').length).toBe(0);
+    expect(fixture.nativeElement.querySelectorAll('app-photo-card').length).toBe(3);
+    expect(fixture.nativeElement.querySelector('[data-testid="photo-grid-error"]')).toBeNull();
+
+    const strip = fixture.nativeElement.querySelector('[data-testid="photo-grid-inline-error"]');
+    expect(strip).toBeTruthy();
+    expect(strip.textContent).toContain('Failed to load photos.');
 
     const emitted: void[] = [];
     fixture.componentInstance.retry.subscribe(() => emitted.push(undefined));
     fixture.nativeElement.querySelector('[data-testid="retry-button"]').click();
     expect(emitted.length).toBe(1);
+  });
+
+  it('stops observing the sentinel while an error is pending', async () => {
+    const fixture = createFixture();
+    fixture.componentRef.setInput('photos', buildPhotos(3));
+    fixture.componentRef.setInput('hasMore', true);
+    fixture.componentRef.setInput('error', 'Failed to load photos.');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(fixture.nativeElement.querySelector('[data-testid="photo-grid-sentinel"]')).toBeNull();
   });
 
   it('shows a loading spinner when loading is true', async () => {
