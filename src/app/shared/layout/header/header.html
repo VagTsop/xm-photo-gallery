@@ -1,28 +1,50 @@
-<mat-toolbar color="primary" class="header">
-  <span class="header__title">XM Photo Gallery</span>
-  <span class="header__spacer"></span>
-  <nav class="header__nav">
-    <a
-      mat-button
-      routerLink="/"
-      routerLinkActive="header__link--active"
-      [routerLinkActiveOptions]="{ exact: true }"
-      data-testid="nav-photos"
-    >
-      <mat-icon>photo_library</mat-icon>
-      Photos
+<header class="header">
+  <div class="header__inner">
+    <a class="header__brand" routerLink="/">
+      <span class="header__mark" aria-hidden="true">
+        <mat-icon>photo_camera</mat-icon>
+      </span>
+      <!-- The stacked wordmark is decorative; the real name is read once, here. -->
+      <span class="header__sr-only">XM Photo Gallery</span>
+      <span class="header__wordmark" aria-hidden="true">
+        <span class="header__wordmark-top">XM</span>
+        <span class="header__wordmark-bottom">Photo Gallery</span>
+      </span>
     </a>
-    <a
-      mat-button
-      routerLink="/favorites"
-      routerLinkActive="header__link--active"
-      data-testid="nav-favorites"
+
+    <nav class="header__nav" aria-label="Main">
+      <a
+        class="header__link"
+        routerLink="/"
+        routerLinkActive="header__link--active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        data-testid="nav-photos"
+      >
+        <mat-icon>photo_library</mat-icon>
+        <span class="header__link-label">Photos</span>
+      </a>
+      <a
+        class="header__link"
+        routerLink="/favorites"
+        routerLinkActive="header__link--active"
+        data-testid="nav-favorites"
+      >
+        <mat-icon>favorite</mat-icon>
+        <span class="header__link-label">Favorites</span>
+        @if (favoritesCount() > 0) {
+          <span class="header__count" data-testid="favorites-count">{{ favoritesCount() }}</span>
+        }
+      </a>
+    </nav>
+
+    <button
+      type="button"
+      class="header__theme"
+      data-testid="theme-toggle"
+      [attr.aria-label]="isDark() ? 'Switch to light theme' : 'Switch to dark theme'"
+      (click)="onThemeToggle()"
     >
-      <mat-icon [matBadge]="favoritesCount() || null" matBadgeColor="accent">favorite</mat-icon>
-      Favorites
-      @if (favoritesCount() > 0) {
-        <span data-testid="favorites-count" class="header__count">({{ favoritesCount() }})</span>
-      }
-    </a>
-  </nav>
-</mat-toolbar>
+      <mat-icon>{{ isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    </button>
+  </div>
+</header>
